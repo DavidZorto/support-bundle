@@ -12,27 +12,42 @@ jobs:
     steps:
       - checkout
 
-      # Access the support bundle file from the repo
+      # Download and extract the Troubleshoot CLI
+      - run:
+          name: Install Troubleshoot CLI
+          command: |
+            curl -LO https://github.com/replicatedhq/troubleshoot/releases/download/v0.114.0/collect_darwin_amd64.tar.gz
+            mkdir -p troubleshoot-cli
+            tar -xzf collect_darwin_amd64.tar.gz -C troubleshoot-cli
+            chmod +x troubleshoot-cli/collect
+            mkdir -p ~/bin
+            mv troubleshoot-cli/collect ~/bin/kubectl-support-bundle
+
+      # Add the local binary directory to PATH
+      - run:
+          name: Add Local Binary to PATH
+          command: |
+            echo 'export PATH=$PATH:~/bin' >> $BASH_ENV
+            source $BASH_ENV
+
+      # Verify the CLI installation
+      - run:
+          name: Verify Troubleshoot CLI
+          command: kubectl-support-bundle --help
+
+      # Prepare the Support Bundle
       - run:
           name: Prepare Support Bundle
           command: |
             mkdir -p support-bundle
             cp ./support-bundle-2.tar.gz support-bundle/
 
-      # Install the Troubleshoot CLI
-      - run:
-          name: Install Troubleshoot CLI
-          command: |
-            curl -LO https://github.com/replicatedhq/troubleshoot/releases/download/v0.114.0/collect_darwin_amd64.tar.gz
-            chmod +x troubleshoot-linux-amd64
-            mv troubleshoot-linux-amd64 /usr/local/bin/kubectl-support-bundle
-
       # Analyze the Support Bundle
       - run:
           name: Analyze Support Bundle
           command: |
             mkdir -p analysis-output
-            kubectl-support-bundle analyze support-bundle/support-bundle.tar.gz --output-dir analysis-output
+            kubectl-support-bundle analyze support-bundle/support-bundle-2.tar.gz --output-dir analysis-output
 
       # Store analysis results as artifacts
       - store_artifacts:
