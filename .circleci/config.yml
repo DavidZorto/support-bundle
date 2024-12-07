@@ -49,7 +49,6 @@ jobs:
             support-bundle analyze ./support-bundle/support-bundle-2.tar.gz --output json > analysis-output/results.json
             
 
-
       # Store analysis results as artifacts
       - store_artifacts:
           path: analysis-output
