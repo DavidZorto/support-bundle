@@ -34,19 +34,32 @@ jobs:
             mkdir -p support-bundle
             cp ./support-bundle-2.tar.gz support-bundle/
 
+      # Debug Input File
       - run:
-    name: Test Analyze Command
-    command: |
-      support-bundle analyze support-bundle/support-bundle-2.tar.gz --output json
+          name: Debug Input File
+          command: |
+            ls -l support-bundle/
+            file support-bundle/support-bundle-2.tar.gz
 
-      # Analyze the Support Bundle
+      # Test Analyze Command without redirection
+      - run:
+          name: Test Analyze Command
+          command: |
+            support-bundle analyze support-bundle/support-bundle-2.tar.gz --output json
+
+      # Analyze the Support Bundle with redirection
       - run:
           name: Analyze Support Bundle
           command: |
             mkdir -p analysis-output
             support-bundle analyze support-bundle/support-bundle-2.tar.gz --output json > analysis-output/results.json
 
-
+      # Debug Analysis Output
+      - run:
+          name: Debug Analysis Output
+          command: |
+            ls -l analysis-output
+            cat analysis-output/results.json || echo "No results.json file found"
 
       # Store analysis results as artifacts
       - store_artifacts:
