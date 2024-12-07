@@ -19,12 +19,12 @@ jobs:
             curl -LO https://github.com/replicatedhq/troubleshoot/releases/download/v0.114.0/collect_darwin_amd64.tar.gz
             tar -xzf collect_darwin_amd64.tar.gz
             chmod +x collect
-            sudo mv collect /usr/local/bin/kubectl-support-bundle
+            sudo mv collect /usr/local/bin/support-bundle
 
       # Verify the CLI installation
       - run:
           name: Verify Troubleshoot CLI
-          command: kubectl support-bundle --help
+          command: support-bundle --help
 
       # Prepare the Support Bundle
       - run:
