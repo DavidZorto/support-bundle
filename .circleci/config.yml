@@ -46,7 +46,7 @@ jobs:
           name: Analyze Support Bundle
           command: |
             mkdir -p analysis-output
-            support-bundle analyze support-bundle/support-bundle-2.tar.gz --output json > analysis-output/results.json
+            support-bundle analyze ./support-bundle/support-bundle-2.tar.gz --output json > analysis-output/results.json
             
 
 
