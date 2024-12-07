@@ -16,10 +16,10 @@ jobs:
       - run:
           name: Install Troubleshoot CLI
           command: |
-            curl -LO https://github.com/replicatedhq/troubleshoot/releases/download/v0.114.0/collect_linux_amd64.tar.gz
-            tar -xzf collect_linux_amd64.tar.gz
-            chmod +x collect
-            sudo mv collect /usr/local/bin/support-bundle
+            curl -LO https://github.com/replicatedhq/troubleshoot/releases/download/v0.114.0/support-bundle_linux_amd64.tar.gz
+            tar -xzf support-bundle_linux_amd64.tar.gz
+            chmod +x support-bundle
+            sudo mv support-bundle /usr/local/bin/
 
       # Verify the CLI installation
       - run:
@@ -46,7 +46,7 @@ jobs:
           name: Analyze Support Bundle
           command: |
             mkdir -p analysis-output
-            support-bundle analyze support-bundle/support-bundle-2.tar.gz --output json
+            support-bundle analyze support-bundle/support-bundle-2.tar.gz --output json > analysis-output/results.json
 
 
 
