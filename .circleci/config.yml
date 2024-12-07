@@ -12,23 +12,14 @@ jobs:
     steps:
       - checkout
 
-      # Download and extract the Troubleshoot CLI
+      # Download, extract, and install the Troubleshoot CLI
       - run:
           name: Install Troubleshoot CLI
           command: |
             curl -LO https://github.com/replicatedhq/troubleshoot/releases/download/v0.114.0/collect_darwin_amd64.tar.gz
-            mkdir -p troubleshoot-cli
-            tar -xzf collect_darwin_amd64.tar.gz -C troubleshoot-cli
-            chmod +x troubleshoot-cli/collect
-            mkdir -p ~/bin
-            mv troubleshoot-cli/collect ~/bin/kubectl-support-bundle
-
-      # Add the local binary directory to PATH
-      - run:
-          name: Add Local Binary to PATH
-          command: |
-            echo 'export PATH=$PATH:~/bin' >> $BASH_ENV
-            source $BASH_ENV
+            tar -xzf collect_darwin_amd64.tar.gz
+            chmod +x collect
+            sudo mv collect /usr/local/bin/kubectl-support-bundle
 
       # Verify the CLI installation
       - run:
