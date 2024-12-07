@@ -39,7 +39,9 @@ jobs:
           name: Analyze Support Bundle
           command: |
             mkdir -p analysis-output
-            support-bundle analyze support-bundle/support-bundle-2.tar.gz --output-dir analysis-output
+            support-bundle analyze support-bundle/support-bundle-2.tar.gz --output json > analysis-output/results.json
+
+
 
       # Store analysis results as artifacts
       - store_artifacts:
