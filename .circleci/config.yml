@@ -34,6 +34,11 @@ jobs:
             mkdir -p support-bundle
             cp ./support-bundle-2.tar.gz support-bundle/
 
+      - run:
+    name: Test Analyze Command
+    command: |
+      support-bundle analyze support-bundle/support-bundle-2.tar.gz --output json
+
       # Analyze the Support Bundle
       - run:
           name: Analyze Support Bundle
