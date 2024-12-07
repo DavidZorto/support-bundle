@@ -24,7 +24,7 @@ jobs:
       # Verify the CLI installation
       - run:
           name: Verify Troubleshoot CLI
-          command: kubectl-support-bundle --help
+          command: kubectl support-bundle --help
 
       # Prepare the Support Bundle
       - run:
