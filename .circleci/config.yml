@@ -34,7 +34,12 @@ jobs:
             mkdir -p support-bundle
             cp ./support-bundle-2.tar.gz support-bundle/
 
-      
+       # Debug Supported Flags
+      - run:
+          name: Check Available Flags
+          command: |
+            support-bundle analyze --help
+
 
       # Analyze the Support Bundle
       - run:
