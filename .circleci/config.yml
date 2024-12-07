@@ -17,6 +17,9 @@ jobs:
           name: Install Troubleshoot CLI
           command: |
             curl -LO https://github.com/replicatedhq/troubleshoot/releases/latest/download/troubleshoot-linux-amd64
+            if [ $(file troubleshoot-linux-amd64 | grep -c "executable") -eq 0 ]; then
+              echo "Failed to download a valid binary." && exit 1
+            fi
             chmod +x troubleshoot-linux-amd64
             mkdir -p ~/bin
             mv troubleshoot-linux-amd64 ~/bin/kubectl-support-bundle
