@@ -1,0 +1,54 @@
+apiVersion: troubleshoot.sh/v1beta2
+kind: Analyzer
+metadata:
+  name: support-bundle-analyzer
+analyzers:
+  # Analyze cluster version (from cluster-info or version.yaml)
+  - clusterVersion:
+      outcomes:
+        - fail:
+            when: "< 1.21.0"
+            message: The cluster version is outdated and may not be supported.
+        - pass:
+            when: ">= 1.21.0"
+            message: The cluster version is up-to-date.
+
+  # Analyze Persistent Volume Claims (PVCs)
+  - storageClass:
+      outcomes:
+        - fail:
+            when: "PVCs > 5"
+            message: Too many PVCs detected; consider cleaning up unused PVCs.
+        - pass:
+            message: PVC count is within acceptable limits.
+
+  # Analyze RabbitMQ Queue Sizes
+  - textAnalyze:
+      checkName: RabbitMQ Queue Size
+      path: "rabbitmq-list-queues/queues.json"
+      outcomes:
+        - fail:
+            when: "queue.size > 1000"
+            message: RabbitMQ queues are overloaded with messages.
+        - pass:
+            message: RabbitMQ queues are within normal limits.
+
+  # Analyze Redis Data
+  - redisMemoryUsage:
+      outcomes:
+        - fail:
+            when: "memory.usage > 80%"
+            message: Redis memory usage is critically high.
+        - pass:
+            message: Redis memory usage is normal.
+
+  # Check Vault Configuration
+  - textAnalyze:
+      checkName: Vault Status
+      path: "pvc-vault/status.json"
+      outcomes:
+        - fail:
+            when: "vault.status == sealed"
+            message: Vault is sealed; unseal it to access secrets.
+        - pass:
+            message: Vault is unsealed and operational.

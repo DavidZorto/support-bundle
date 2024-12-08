@@ -1,0 +1,84 @@
+apiVersion: troubleshoot.sh/v1beta2
+kind: SupportBundle
+metadata:
+  name: complete-analysis
+spec:
+  analyzers:
+    - clusterVersion:
+        outcomes:
+          - fail:
+              when: "< 1.22.0"
+              message: "Cluster version is below the required 1.22.0."
+          - warn:
+              when: "< 1.24.0"
+              message: "Cluster version is acceptable but below the recommended 1.24.0."
+          - pass:
+              message: "Cluster version meets the requirements."
+
+    - clusterPodStatuses:
+        outcomes:
+          - pass:
+              message: "All pods are running as expected."
+          - fail:
+              when: "Failed > 0"
+              message: "Some pods have failed."
+
+    - clusterContainerStatuses:
+        outcomes:
+          - pass:
+              message: "All containers are running as expected."
+          - fail:
+              when: "Failed > 0"
+              message: "Some containers have failed."
+
+    - certificates:
+        outcomes:
+          - pass:
+              message: "All certificates are valid and within expiration dates."
+          - fail:
+              when: "Expired > 0"
+              message: "Some certificates have expired."
+
+    - kubernetesDistribution:
+        outcomes:
+          - pass:
+              message: "Cluster is a supported Kubernetes distribution."
+          - fail:
+              message: "Unsupported Kubernetes distribution."
+
+    - nodeResources:
+        outcomes:
+          - pass:
+              message: "All nodes have sufficient resources."
+          - fail:
+              when: "MemoryPressure > 0 || DiskPressure > 0"
+              message: "One or more nodes are under resource pressure."
+
+    - storageClass:
+        outcomes:
+          - pass:
+              message: "All storage classes are valid and functional."
+          - fail:
+              message: "Storage class misconfiguration detected."
+
+    - deploymentStatus:
+        outcomes:
+          - pass:
+              message: "All deployments are healthy."
+          - fail:
+              when: "UnavailableReplicas > 0"
+              message: "Some deployments are unhealthy."
+
+    - statefulSetStatus:
+        outcomes:
+          - pass:
+              message: "All StatefulSets are healthy."
+          - fail:
+              message: "One or more StatefulSets have issues."
+
+    - event:
+        outcomes:
+          - pass:
+              message: "No critical events found."
+          - fail:
+              message: "Critical cluster events detected."
